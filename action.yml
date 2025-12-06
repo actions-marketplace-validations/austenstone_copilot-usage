@@ -8,8 +8,7 @@ branding:
 inputs:
   github-token:
     description: The GitHub token used to create an authenticated client
-    default: ${{ github.token }}
-    required: false
+    required: true
   enterprise:
     description: The GitHub enterprise slug
     required: false
@@ -24,23 +23,55 @@ inputs:
     description: The number of days to show usage metrics for.
     required: false
   since:
-    description: Show usage metrics since this date. This is a timestamp in ISO 8601 format (YYYY-MM-DDTHH:MM:SSZ). Maximum value is 28 days ago.
+    description: Show usage metrics since this date. This is a timestamp in the format (YYYY-MM-DD). Maximum value is 28 days ago.
     required: false
   until:
-    description: Show usage metrics until this date. This is a timestamp in ISO 8601 format (YYYY-MM-DDTHH:MM:SSZ). Maximum value is 28 days ago.
+    description: Show usage metrics until this date. This is a timestamp in the format (YYYY-MM-DD). Maximum value is 28 days ago.
     required: false
   job-summary:
-    description: Wither to generate a report
+    description: Whether to generate a report
+    required: false
+    default: true
+  json:
+    description: Whether to generate JSON as a workflow artifact
     required: false
     default: true
   csv:
-    description: Wither to generate a CSV as a workflow artifact
+    description: Whether to generate CSV as a workflow artifact
     required: false
     default: false
+  csv-options:
+    description: Options for the CSV generation
+    required: false
+  xml:
+    description: Whether to generate XML as a workflow artifact
+    required: false
+    default: false
+  xml-options:
+    description: Options for the XML generation
+    required: false
+  time-zone:
+    description: The time zone to use for the report
+    required: false
+    default: "UTC"
+  artifact-name:
+    description: The name of the artifact to create
+    required: false
+    default: "copilot-usage"
+  
 outputs:
   result:
     description: The copilot usage as a JSON string
-
+  result-org-details:
+    description: The copilot organization details
+  result-seats:
+    description: The copilot seat details
+  since:
+    description: The date since which the usage metrics are shown
+  until:
+    description: The date until which the usage metrics are shown
+  days:
+    description: The number of days for which usage metrics are shown
 runs:
   using: "node20"
   main: "dist/index.js"

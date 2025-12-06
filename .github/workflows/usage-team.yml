@@ -1,0 +1,36 @@
+name: Usage Teams
+on:
+  push:
+    branches: [ main ]
+    paths-ignore:
+      - "**.md"
+  workflow_dispatch:
+permissions:
+  contents: read
+
+jobs:
+  run:
+    if: ${{ github.actor != 'dependabot[bot]' }}
+    name: Copilot Usage
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        # Add your teams here
+        team:
+          - corporate-solutions-eng
+          - bookstore-developers
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./
+        with:
+          # Add your organization here
+          organization: ${{ vars.ORG }}
+          team: ${{ matrix.team }}
+          # Add your token here
+          github-token: ${{ secrets.TOKEN }}
+          time-zone: "EST"
+          artifact-name: ${{ matrix.team }}-copilot-usage
+      - uses: austenstone/job-summary@main
+        with:
+          name: ${{ matrix.team }}-copilot-usage
+          artifact-name: ${{ matrix.team }}
